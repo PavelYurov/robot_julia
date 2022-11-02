@@ -230,7 +230,8 @@ function get_border_side(r)
             return HorizonSide(i)
         end
     end
-    return Nothing
+    throw("ERR: no border nearby")
+    return Nord
 end
 
 function move_border(cr,direction)
@@ -244,7 +245,9 @@ function move_border(cr,direction)
             end
         end
     end
-    move!(cr,direction)
+    if !isborder(cr,direction)
+        move!(cr,direction)
+    end
     return direction
 
 end
