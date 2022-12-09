@@ -49,22 +49,6 @@ function change_rotation(direction::HorizonSide, value)
     return new_direction
 end
 
-#function move_in_cord(direction::HorizonSide,coord::Coord)
-#    if direction == Nord 
-#        coord.y += 1
-#    end
-#    if direction == Sud
-#     coord.y -= 1
-#    end
-#    if direction == West 
-#    coord.x -= 1
-#    end
-#    if direction == Ost
-#    coord.x += 1
-#    end
-#    return coord
-#end
-
 function save_data(ptr_robot::coordrobot, arr_data::Array)
     for i in 0:3
         arr_data[ptr_robot.cordinates.x , ptr_robot.cordinates.y, i+1] = isborder(ptr_robot,HorizonSide(i))
@@ -205,7 +189,7 @@ function find_border_cord(data_array::Array, border_data::Array)
 end
 
 function recurse_prepare_2(cr::coordrobot, func::Function, arg_1 = 0)#не работает!
-    was_mn = Set{Coord}()
+    was_mn = []
 function recurse_with_mn()
     if (get_cord(cr) ∉ was_mn)
         push!(was_mn,get_cord(cr))
@@ -356,4 +340,65 @@ function recurse_bomb_wall_counter(was_arr, wall_arr,x,y,raz_x,raz_y)
             recurse_bomb_wall_counter(was_arr,wall_arr,c.x,c.y,raz_x,raz_y)
         end
     end
+end
+
+function  bigs_data(arr, raz::Int, animate::Bool = false)
+    new_arr = zeros(Bool,raz*3,raz*3)
+    for x in 1:raz
+        for y in 1:raz
+            if arr[x,y,1]
+                for i in 0:2
+                    new_arr[x*3-2+i,y*3] = true
+                end
+            end
+            if arr[x,y,4]
+                for i in 0:2
+                    new_arr[x*3-2,y*3-2+i] = true
+                end
+            end
+            if arr[x,y,3]
+                for i in 0:2
+                    new_arr[x*3-2+i,y*3-2] = true
+                end
+            end
+            if arr[x,y,2]
+                for i in 0:2
+                    new_arr[x*3,y*3-2+i] = true
+                end
+            end
+        end
+    end
+    fix_bigs_arr(new_arr,raz)
+    if(animate)
+        for y in 1:raz*3
+            for x in  1:raz*3
+                print(Int(new_arr[x,y]))
+            end
+            println()
+        end
+    end
+    return new_arr
+end
+
+function fix_bigs_arr(arr,raz)
+for ii in 2:(raz-1)
+    for iii in 2:(raz-1)
+        for i in 0:3
+            for xi = 0:1
+                for yi = 0:1
+            x = ii*3-2*xi
+            y = iii*3-2*yi
+            c1 = Coord(x,y)
+            c2 = Coord(x,y)
+            c1 = move(c1,HorizonSide(i))
+            c2 = move(c2,HorizonSide(i))
+            if arr[c1.x,c1.y] && arr[c2.x,c2.y]
+                arr[x,y] = true
+                break
+            end
+        end
+    end
+        end
+    end
+end
 end

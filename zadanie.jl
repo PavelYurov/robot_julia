@@ -226,8 +226,8 @@ function zadanie_38(r)
     end
 end
 
-function zadanie_40(r)
-    razmer = 10
+function zadanie_40(r, animate::Bool = false)
+    razmer = 4
     amount = 0
     data_array = zeros(Bool,razmer,razmer,5)
     recurse_prepared(r,save_data,data_array,razmer,razmer)
@@ -237,10 +237,12 @@ function zadanie_40(r)
         recurse_prepared(r,save_data,data_array,razmer,razmer)
     end
     
-    was_arr = zeros(Bool,razmer,razmer)
-    wall_arr = zeros(Bool,razmer,razmer)
-    wall_arr = get_walls(wall_arr,data_array,razmer,razmer)
-    amount = recurse_bomb_v2(was_arr, wall_arr,razmer,razmer)
+    wall_arr = bigs_data(data_array,razmer,animate)
+
+    was_arr = zeros(Bool,razmer*3,razmer*3)
+    #wall_arr = zeros(Bool,razmer,razmer)
+    #wall_arr = get_walls(wall_arr,data_array,razmer,razmer)
+    amount = recurse_bomb_v2(was_arr, wall_arr,razmer*3,razmer*3)
     print(amount-1)
 end
 
