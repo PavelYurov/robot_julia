@@ -8,25 +8,25 @@ const razmer_y = 100
 #recurse(was_array,cr,none_function)
 #recurse(was_array,cr,save_data,data_array)
 
-function recurse_prepared(r::Robot, func::Function, arg_1 = 0, _razmer_x = razmer_x,_razmer_y = razmer_y)
+function recurse_prepared(r, func::Function, arg_1 = 0, _razmer_x = razmer_x,_razmer_y = razmer_y)
     was_array = zeros(Bool,_razmer_x,_razmer_y)
-    cr = coordrobot(r,Coord(_razmer_x ÷ 2,_razmer_y ÷ 2))
+    cr = coordrobot(get_robot(r),Coord(_razmer_x ÷ 2,_razmer_y ÷ 2))
     recurse(was_array,cr,_razmer_x, _razmer_y,func,arg_1)
 end
 
-function recurse_prepared_for_38_39(r::Robot,bord_data, func::Function, arg_1 = 0, add_value = 1)
+function recurse_prepared_for_38_39(r,bord_data, func::Function, arg_1 = 0, add_value = 1)
     raz_x = bord_data[2] - bord_data[1] + add_value
     raz_y = bord_data[4] - bord_data[3] + add_value
     was_array = zeros(Bool,raz_x,raz_y)
-    cr = coordrobot(r,Coord(1-bord_data[1],1-bord_data[3]))
+    cr = coordrobot(get_robot(r),Coord(1-bord_data[1],1-bord_data[3]))
     recurse(was_array,cr,raz_x, raz_y,func,arg_1)
 end
 
 
-function zadanie_1(r::Robot)
+function zadanie_1(r)
     data_array = zeros(Bool,razmer_x,razmer_y,6)
     was_array = zeros(Bool,razmer_x,razmer_y)
-    cr = coordrobot(r,Coord(razmer_x ÷ 2,razmer_y ÷ 2))
+    cr = coordrobot(get_robot(r),Coord(razmer_x ÷ 2,razmer_y ÷ 2))
 
     recurse(was_array,cr, razmer_x, razmer_y, save_data,data_array)
 
@@ -101,21 +101,21 @@ function zad_2(arr_data::Array)
     end
 end
 
-function zadanie_2(r::Robot)
+function zadanie_2(r)
     data_array = zeros(Bool,razmer_x,razmer_y,6)
-    recurse_prepared(r,save_data,data_array)
+    recurse_prepared(get_robot(r),save_data,data_array)
     zad_2(data_array)
-    recurse_prepared(r,put_all_markers,data_array)
+    recurse_prepared(get_robot(r),put_all_markers,data_array)
 end
 
-function zadanie_3(r::Robot)
-    recurse_prepared(r,putmarkers_for_recurce)
+function zadanie_3(r)
+    recurse_prepared(get_robot(r),putmarkers_for_recurce)
 end
 
-function zadanie_4(r::Robot)
+function zadanie_4(r)
 
     data_array = zeros(Bool,razmer_x,razmer_y,6)
-    recurse_prepared(r,save_data,data_array)
+    recurse_prepared(get_robot(r),save_data,data_array)
     for x in 1:razmer_x
         for y in 1:razmer_y
            if abs(x - (razmer_x / 2)) == abs(y - (razmer_y / 2))
@@ -123,10 +123,10 @@ function zadanie_4(r::Robot)
             end
          end
      end
-    recurse_prepared(r,put_all_markers,data_array)
+    recurse_prepared(get_robot(r),put_all_markers,data_array)
 end
 
-function zadanie_5(r::Robot)
+function zadanie_5(r)
     zadanie_2(r)
 end
 
@@ -138,31 +138,31 @@ function recurse_bomb_prepared(data_array::Array, func::Function)
     recurse_bomb(was_array,data_array, 2, razmer_y - 1, 1, razmer_x ÷ 2, razmer_y ÷ 2 - 1, razmer_y, func)
     recurse_bomb(was_array,data_array, razmer_x - 1, razmer_y - 1, razmer_x ÷ 2 - 1, razmer_x,razmer_y ÷ 2 - 1, razmer_y, func)
 end
-function zadanie_6a(r::Robot)
+function zadanie_6a(r)
     data_array = zeros(Bool,razmer_x,razmer_y,6)
-    recurse_prepared(r,save_data,data_array)
+    recurse_prepared(get_robot(r),save_data,data_array)
     recurse_bomb_prepared(data_array,zad_6a)
-    recurse_prepared(r,put_all_markers,data_array)
+    recurse_prepared(get_robot(r),put_all_markers,data_array)
 end 
-function zadanie_6b(r::Robot)
+function zadanie_6b(r)
     data_array = zeros(Bool,razmer_x,razmer_y,6)
-    recurse_prepared(r,save_data,data_array)
+    recurse_prepared(get_robot(r),save_data,data_array)
     recurse_bomb_prepared(data_array,zad_6b)
-    recurse_prepared(r,put_all_markers,data_array)
+    recurse_prepared(get_robot(r),put_all_markers,data_array)
 end 
 
-function zadanie_7(r::Robot)
-    right_left(r,found_gap)
-    move!(r,Nord)
+function zadanie_7(r)
+    right_left(get_robot(r),found_gap)
+    move!(get_robot(r),Nord)
 end
 
 function zadanie_8(r::Robot)
-
+#?
 end
 
-function zadanie_9(r::Robot)
+function zadanie_9(r)
     data_array = zeros(Bool,razmer_x,razmer_y,6)
-    recurse_prepared(r,save_data,data_array)
+    recurse_prepared(get_robot(r),save_data,data_array)
     for x in 1:razmer_x
         for y in 1:razmer_y
             if mod(x,2) == mod(y,2)
@@ -170,13 +170,13 @@ function zadanie_9(r::Robot)
             end
         end
     end
-    recurse_prepared(r,put_all_markers,data_array)
+    recurse_prepared(get_robot(r),put_all_markers,data_array)
 end
 
-function zadanie_10(r::Robot, n::Int)
+function zadanie_10(r, n::Int)
 
     data_array = zeros(Bool,razmer_x,razmer_y,6)
-    recurse_prepared(r,save_data,data_array)
+    recurse_prepared(get_robot(r),save_data,data_array)
     border_data = zeros(Int,4)
 
     border_data = find_border_cord(data_array,border_data);
@@ -190,19 +190,19 @@ function zadanie_10(r::Robot, n::Int)
             end
         end
     end
-    recurse_prepared(r,put_all_markers,data_array)
+    recurse_prepared(get_robot(r),put_all_markers,data_array)
 end
 
 function zadanie_39(r)
     s = 0
-    cr = coordrobot(r,Coord(0,0))
+    cr = coordrobot(get_robot(r),Coord(0,0))
     border_arr = zeros(Int,4)#x_min, x_max, y_min, y_max
     #recurse_prepare_2(cr,none_function)
     border_arr = get_conture_coord(border_arr,cr)
     raz_x = border_arr[2] - border_arr[1]+1
     raz_y = border_arr[4] - border_arr[3] + 1
     data_array = zeros(Bool,(border_arr[2] - border_arr[1]+1), (border_arr[4] - border_arr[3] + 1),6)
-    recurse_prepared_for_38_39(r,border_arr,save_data,data_array)
+    recurse_prepared_for_38_39(get_robot(r),border_arr,save_data,data_array)
     for i in data_array[1:end,1:end,5]
         if !i
             s+=1
@@ -212,13 +212,13 @@ function zadanie_39(r)
 end
 
 function zadanie_38(r)
-    cr = coordrobot(r,Coord(0,0))
+    cr = coordrobot(get_robot(r),Coord(0,0))
     border_arr = zeros(Int,4)#x_min, x_max, y_min, y_max
     border_arr = get_conture_coord(border_arr,cr)
     raz_x = border_arr[2] - border_arr[1] + 3
     raz_y = border_arr[4] - border_arr[3] + 3
     data_array = zeros(Bool,(border_arr[2] - border_arr[1]+3), (border_arr[4] - border_arr[3] + 3),6)
-    recurse_prepared_for_38_39(r,border_arr,save_data,data_array,3)
+    recurse_prepared_for_38_39(get_robot(r),border_arr,save_data,data_array,3)
     if data_array[end,end,5]
         print("снаружи")
     else
@@ -230,11 +230,11 @@ function zadanie_40(r, animate::Bool = false)
     razmer = 4
     amount = 0
     data_array = zeros(Bool,razmer,razmer,5)
-    recurse_prepared(r,save_data,data_array,razmer,razmer)
+    recurse_prepared(get_robot(r),save_data,data_array,razmer,razmer)
     while border_is_free(data_array)
         razmer += 10
         data_array = zeros(Bool,razmer,razmer,5)
-        recurse_prepared(r,save_data,data_array,razmer,razmer)
+        recurse_prepared(get_robot(r),save_data,data_array,razmer,razmer)
     end
     
     wall_arr = bigs_data(data_array,razmer,animate)

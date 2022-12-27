@@ -24,6 +24,10 @@ struct coordrobot <: Abstract_Robot
     cordinates::Coord
 end
 
+function get_robot(robot::Robot)
+    return robot
+end
+
 function get_robot(ptr_robot::coordrobot)
     return ptr_robot.robot
 end;
